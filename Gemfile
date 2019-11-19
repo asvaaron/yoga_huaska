@@ -26,6 +26,9 @@ gem 'bootstrap-sass'
 # Add country select
 gem 'chosen-rails'
 gem 'country_select'
+# Font Awesome
+gem "font-awesome-rails"
+
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
