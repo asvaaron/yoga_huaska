@@ -19,6 +19,14 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 # Devise Dependency
 gem 'devise'
+gem 'devise-i18n'
+gem 'devise-bootstrap-views', '~> 1.0'
+# Bootstrap
+gem 'bootstrap-sass'
+# Add country select
+gem 'chosen-rails'
+gem 'country_select'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
@@ -50,6 +58,10 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
+  # Cucumber utility
+  gem 'cucumber-rails', require: false
+  # Database cleaner
+  gem 'database_cleaner'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
