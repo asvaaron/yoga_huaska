@@ -33,6 +33,11 @@ yarn-debug.log*
 # Database Yaml
 config/database.yml
 
-# IDEA Configuiration
+# Log files
+/log
 
-./idea
+# Temporal files
+/tmp
+
+# Idea RubyMine
+/.idea
