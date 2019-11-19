@@ -26,6 +26,8 @@ gem 'bootstrap-sass'
 # Add country select
 gem 'chosen-rails'
 gem 'country_select'
+# Country flag
+gem 'flag-icons-rails'
 # Font Awesome
 gem "font-awesome-rails"
 
