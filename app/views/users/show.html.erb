@@ -1,9 +1,10 @@
+<h1 class="text-center"> User Profile</h1>
 <div class="container">
   <div class="row">
-          <div class="col-sm-6 col-md-4">
-            <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+          <div class="col-2 ">
+            <img src="http://placehold.it/150x200" alt="" class="img-rounded img-responsive" />
           </div>
-          <div class="col-sm-6 col-md-8">
+          <div class="col-10 ">
             <h3> <%= @user.complete_name %></h3>
             <p>
               <%= fa_icon "compass" %>
@@ -27,4 +28,43 @@
             </div>
           </div>
         </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+      <h4>Calendar</h4>
+
+      <%= week_calendar events: @appointments do |date, appointments| %>
+        <%= date %>
+        <% appointments.each do |appointment| %>
+          <div>
+            <%= appointment.type_of %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-2">
+      <h4>Appointments</h4>
+        <% @appointments.each do |appointment| %>
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class=card-title"><%= appointment.type_of %></h5>
+            <p class="card-text">
+              <%= fa_icon "calendar" %>
+              From: <%= appointment.start_time%> to: <%=appointment.end_time%>
+            </p>
+            <a href="#" class="card-link">Remove Event</a>
+            <a href="#" class="card-link">Re-schedule Events</a>
+          </div>
+        </div>
+
+        <% end %>
+    </div>
+
+  </div>
+
+</div>
+
 </div>
