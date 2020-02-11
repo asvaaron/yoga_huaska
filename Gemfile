@@ -22,7 +22,8 @@ gem 'devise'
 gem 'devise-i18n'
 gem 'devise-bootstrap-views', '~> 1.0'
 # Bootstrap
-gem 'bootstrap-sass'
+gem 'bootstrap', '~> 4.3.1'
+gem 'jquery-rails'
 # Add country select
 gem 'chosen-rails'
 gem 'country_select'
@@ -30,6 +31,8 @@ gem 'country_select'
 gem 'flag-icons-rails'
 # Font Awesome
 gem "font-awesome-rails"
+# Simple Calendar
+gem "simple_calendar", "~> 2.0"
 
 
 # Use Redis adapter to run Action Cable in production
@@ -55,6 +58,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  # Seeds dump
+  gem 'seed_dump'
 end
 
 group :test do
