@@ -1,0 +1,11 @@
+[AML_virtual]
+ubuntu_server.com ansible_user=aaron
+
+[AML_manager]
+AML_Manager.com ansible_user=ubuntu
+
+
+
+
+
+

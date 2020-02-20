@@ -1,0 +1,63 @@
+---
+- name: Set up packages for AML project
+  hosts: AML_virtual
+  become: yes
+#  become_method: sudo
+#  become_user: aaron
+  vars:
+    # mkpasswd --method=SHA-512
+    server_path: /var/www/yoga_huaska
+    clone_path: /var/www
+    ruby_version: ruby-2.6.3
+  tasks:
+    - name: Download the installation script for Node Js
+      shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+    # Add the RVM repository
+    - name: Add RVM dependencies
+      apt_repository: repo=ppa:rael-gc/rvm state=present
+    - name: Install Yoga Huaska Dependecies
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        # Install basic packages
+        - software-properties-common
+        - build-essential
+        - libssl-dev
+        - libffi-dev
+        - htop
+        - cowsay
+        - libsasl2-dev
+        # Install Node and NPM
+        - nodejs
+        # Install Redis
+        - redis-server
+        # Mysql client connector
+        - libmysqlclient-dev
+        # Install RVM
+        - rvm
+        # Apache, Mysql, Postgres
+        - tasksel
+    # Install ruby
+    - name: Install the ruby version
+      command: "/usr/share/rvm/bin/rvm install {{ ruby_version }}"
+    - name: Make ruby default version
+      command: "/usr/share/rvm/bin/rvm --default {{ ruby_version }}"
+
+
+#    - name: Remove Folder
+#        file: path={{server_path}} state=absent
+# MySQL Database configuration
+
+# Confugure Mysql
+# - libmysqlclient-dev
+
+
+# Install PHP my admin
+# # apt-get update
+# # echo /etc/apache2/apache.conf >> Include /etc/phpmyadmin/apache.conf
+
+
