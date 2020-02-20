@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # Add association for the join tables
+  has_and_belongs_to_many :appointments
 
 
   # Return User's complete name
@@ -20,5 +22,21 @@ class User < ApplicationRecord
   # Return Users's birthday format
   def birthday_format
     self.date_of_birth.strftime("%B %d, %Y")
+  end
+
+  # Find and remove an users's appointment using id
+  def remove_appointment(id)
+    appointment = Appointment.find(id)
+    if self.appointments.exists?(appointment.id)
+      self.appointments.delete(appointment)
+    end
+  end
+
+  # Find and add an users's appointment using id
+  def add_appointment(id)
+    appointment = Appointment.find(id)
+    unless self.appointments.exists?(appointment.id)
+      self.appointments << appointment
+    end
   end
 end
