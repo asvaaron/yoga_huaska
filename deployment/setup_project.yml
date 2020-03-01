@@ -43,9 +43,17 @@
         - tasksel
     # Install ruby
     - name: Install the ruby version
-      command: "/usr/share/rvm/bin/rvm install {{ ruby_version }}"
+      command: "{{ item }}"
+      with_items:
+        /bin/bash --login
+        /usr/share/rvm/bin/rvm install {{ ruby_version }}
+      become: false
     - name: Make ruby default version
-      command: "/usr/share/rvm/bin/rvm --default {{ ruby_version }}"
+      command: "{{ item }}"
+      with_items:
+          /bin/bash --login
+          /usr/share/rvm/bin/rvm --default {{ ruby_version }}
+      become: false
 
 
 #    - name: Remove Folder

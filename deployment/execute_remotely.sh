@@ -16,6 +16,9 @@ ansible-playbook setup_project.yml -i hosts
 # Verbose
 ansible-playbook setup_project.yml -i hosts -vvv
 
+#Check ansible playbook file
+ansible-playbook setup_project.yml --check -i hosts
+
 # Sudo password same as introduced password
 ansible-playbook setup_project.yml --ask-pass -i hosts -k -K -vvv
 
