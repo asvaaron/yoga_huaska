@@ -8,17 +8,25 @@
     # mkpasswd --method=SHA-512
     server_path: /var/www/yoga_huaska
     clone_path: /var/www
-    ruby_version: ruby-2.6.3
+    ruby_version: ruby-2.3.3
   tasks:
+    - name: Ouput System OS
+      debug:
+        msg: "Hello world"
     - name: Download the installation script for Node Js
       shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+
     - name: Update apt packages
       apt:
         update_cache: yes
+
     # Add the RVM repository
-    - name: Add RVM dependencies
-      apt_repository: repo=ppa:rael-gc/rvm state=present
-    - name: Install Yoga Huaska Dependecies
+    - name: Add RVM repository
+      apt_repository:
+        repo: ppa:rael-gc/rvm
+        state: present
+
+    - name: Install Yoga Huaska Dependencies
       apt:
         name: "{{ item }}"
         state: present
@@ -29,6 +37,8 @@
         - libssl-dev
         - libffi-dev
         - htop
+        - wget
+        - ca-certificates
         - cowsay
         - libsasl2-dev
         # Install Node and NPM
@@ -40,14 +50,16 @@
         # Install RVM
         - rvm
         # Apache, Mysql, Postgres
-        - tasksel
+        - apache2
+        - postgresql
     # Install ruby
-    - name: Install the ruby version
+    - name: Install a ruby version
       command: "{{ item }}"
       with_items:
         /bin/bash --login
         /usr/share/rvm/bin/rvm install {{ ruby_version }}
       become: false
+
     - name: Make ruby default version
       command: "{{ item }}"
       with_items:
