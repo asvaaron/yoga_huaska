@@ -13,8 +13,18 @@
     - name: Ouput System OS
       debug:
         msg: "Hello world"
+
     - name: Download the installation script for Node Js
       shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+
+    - name: Download the installation keys for YARN
+      shell: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    - name: Add YARN APT repository
+      lineinfile:
+        path: /etc/apt/sources.list.d/yarn.list
+        regex: '^deb https://dl.yarnpkg.com/debian/ stable main'
+        line: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        create: yes
 
     - name: Update apt packages
       apt:
@@ -43,6 +53,7 @@
         - libsasl2-dev
         # Install Node and NPM
         - nodejs
+        - yarn
         # Install Redis
         - redis-server
         # Mysql client connector
@@ -93,8 +104,6 @@
 
     - debug: var=postgres_version
 
-    - debug: var=ruby_vars
-
     - name: Allow External database connection
       lineinfile:
         path: "/etc/postgresql/{{ postgres_version }}/main/pg_hba.conf"
@@ -114,26 +123,18 @@
         name: postgresql
         state: restarted
 
+    - name: Reboot a slow machine that might have lots of updates to apply
+      reboot:
+        reboot_timeout: 3600
+
+    - name: Create a new database with same name as username
+      postgresql_db:
+        name: "{{ ruby_vars.postgres_username }}"
+
     - name: Add user to Postgres cluster, grant access
       postgresql_user:
-        db: ALL
-        name: developer
-        password: Developer123
-        priv: ALL
+        login_user: postgres
+        role_attr_flags: "SUPERUSER"
+        name: "{{ ruby_vars.postgres_username }}"
+        password: "{{ ruby_vars.postgres_username }}"
         state: present
-
-
-
-#    - name: Remove Folder
-#        file: path={{server_path}} state=absent
-# MySQL Database configuration
-
-# Confugure Mysql
-# - libmysqlclient-dev
-
-
-# Install PHP my admin
-# # apt-get update
-# # echo /etc/apache2/apache.conf >> Include /etc/phpmyadmin/apache.conf
-
-
