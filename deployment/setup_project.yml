@@ -2,14 +2,14 @@
 - name: Set up packages for AML project
   hosts: AML_virtual
   become: yes
-#  become_method: sudo
-#  become_user: aaron
-  vars:
-    # mkpasswd --method=SHA-512
-    server_path: /var/www/yoga_huaska
-    clone_path: /var/www
-    ruby_version: ruby-2.3.3
+  gather_facts: True
+
   tasks:
+    - debug: var=hostvars[inventory_hostname]['ansible_enp0s3']['ipv4']['address']
+    - name: Load Ruby Vars
+      include_vars:
+        file: vars/ruby_vars.json
+        name: ruby_vars
     - name: Ouput System OS
       debug:
         msg: "Hello world"
@@ -50,22 +50,78 @@
         # Install RVM
         - rvm
         # Apache, Mysql, Postgres
+        - php
         - apache2
         - postgresql
-    # Install ruby
-    - name: Install a ruby version
-      command: "{{ item }}"
-      with_items:
-        /bin/bash --login
-        /usr/share/rvm/bin/rvm install {{ ruby_version }}
-      become: false
+        - postgresql-contrib
+        - libpq-dev
+        - python-psycopg2
+        - phppgadmin
 
-    - name: Make ruby default version
-      command: "{{ item }}"
-      with_items:
-          /bin/bash --login
-          /usr/share/rvm/bin/rvm --default {{ ruby_version }}
-      become: false
+#    # Install ruby with defined version
+#    - name: Install a ruby version
+#      shell: |
+#        /bin/bash --login
+#        /usr/share/rvm/bin/rvm install {{ ruby_vars.ruby_version }}
+#      become: false
+#
+#    - name: Make ruby default version
+#      shell: |
+#          /bin/bash --login
+#          /usr/share/rvm/bin/rvm --default {{ ruby_vars.ruby_version  }}
+#      become: false
+#
+#
+##      ## Configure Postgres sql
+    - name: Ensure the PostgreSQL service is running
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Get postgres version
+      find:
+        path: /etc/postgresql
+        file_type: directory
+      register: postgres_version
+
+    - name: Define postgres_version
+      set_fact:
+        postgres_version: "{{ postgres_version.files[0].path | regex_search(qry) }}"
+      vars:
+        qry: '[0-9]+'
+
+    - debug: var=postgres_version
+
+    - debug: var=ruby_vars
+
+    - name: Allow External database connection
+      lineinfile:
+        path: "/etc/postgresql/{{ postgres_version }}/main/pg_hba.conf"
+        state: present
+        regexp: '^host    all             all             127.0.0.1/32            md5'
+        line: host    all             all             0.0.0.0/32            md5
+
+    - name: Allow postgres connection md5 check
+      lineinfile:
+        path: "/etc/postgresql/{{ postgres_version }}/main/pg_hba.conf"
+        state: present
+        regexp: '^local   all             postgres                                peer'
+        line: local   all             postgres                                md5
+
+    - name: restart postgresql
+      service:
+        name: postgresql
+        state: restarted
+
+    - name: Add user to Postgres cluster, grant access
+      postgresql_user:
+        db: ALL
+        name: developer
+        password: Developer123
+        priv: ALL
+        state: present
+
 
 
 #    - name: Remove Folder
