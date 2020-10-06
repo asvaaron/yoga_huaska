@@ -1,10 +1,11 @@
-# Use postgres/example user/password credentials
+# Docker composer file for postgres sql configuration
 version: '3.1'
 
 services:
 
-  db:
+  postgres:
     image: postgres
+    container_name: postgres_container
     restart: always
     ports:
       - 5432:5432
@@ -13,14 +14,29 @@ services:
       POSTGRES_USER: developer
       POSTGRES_PASSWORD: Developer123
     expose:
-      - 5435
+      - 5432
     volumes:
       - db-postgres:/var/lib/postgres
 
   adminer:
+    container_name: postgres_adminer
     image: adminer
     restart: always
     ports:
       - 9090:8080
+
+
+  pgadmin:
+    container_name: postgres_pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: Developer123
+    ports:
+      - 9998:80
+    depends_on:
+      - postgres
+    restart: always
+
 volumes:
   db-postgres:
