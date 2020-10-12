@@ -1,42 +1,39 @@
 <h1 class="text-center"> User Profile</h1>
 <div class="container">
   <div class="row">
-          <div class="col-2 ">
-            <img src="http://placehold.it/150x200" alt="" class="img-rounded img-responsive" />
-          </div>
-          <div class="col-10 ">
-            <h3> <%= @user.complete_name %></h3>
-            <p>
-              <%= fa_icon "compass" %>
-              <%= @user.country_name%>
+    <div class="col-2 ">
+      <img src="http://placehold.it/150x200" alt="" class="img-rounded img-responsive"/>
+    </div>
+    <div class="col-10 ">
+      <h3> <%= @user.complete_name %></h3>
+      <p>
+        <%= fa_icon "compass" %>
+        <%= @user.country_name %>
 
-              <%= flag_icon(@user.country.downcase, class: 'strong') %>
+        <%= flag_icon(@user.country.downcase, class: 'strong') %>
 
-            </p>
-            <p>
-              <%= fa_icon "envelope" %>
-              <%= @user.email %>
-            </p>
-            <p>
-              <%= fa_icon "birthday-cake" %>
-              <%= @user.birthday_format %>
-            </p>
-            <!-- Split button -->
+      </p>
+      <p>
+        <%= fa_icon "envelope" %>
+        <%= @user.email %>
+      </p>
+      <p>
+        <%= fa_icon "birthday-cake" %>
+        <%= @user.birthday_format %>
+      </p>
 
-            <div class="btn-group">
-              <%= link_to 'Edit', edit_user_registration_path(@user), class: "btn btn-primary" %>
-            </div>
-          </div>
-        </div>
+      <%= link_to 'Edit', edit_user_registration_path(@user), class: "btn btn-primary" %>
+
+    </div>
+  </div>
 </div>
 
 
-<div class="container">
+<div class="container mt-2">
   <div class="row">
-    <div class="col-10">
+    <div class="col-8">
       <h4>Calendar</h4>
-
-      <%= week_calendar events: @appointments do |date, appointments| %>
+      <%= month_calendar events: @appointments do |date, appointments| %>
         <%= date %>
         <% appointments.each do |appointment| %>
           <div>
@@ -45,26 +42,33 @@
         <% end %>
       <% end %>
     </div>
-    <div class="col-2">
+    <div class="col-4">
       <h4>Appointments</h4>
-        <% @appointments.each do |appointment| %>
-        <div class="card" style="width: 18rem;">
+      <% @appointments.each do |appointment| %>
+        <div class="card">
           <div class="card-body">
             <h5 class=card-title"><%= appointment.type_of %></h5>
             <p class="card-text">
-              <%= fa_icon "calendar" %>
-              From: <%= appointment.start_time%> to: <%=appointment.end_time%>
+            <p>
+              <%= fa_icon "map-marker" %>
+              <%= appointment.address %>
             </p>
-            <a href="#" class="card-link">Remove Event</a>
-            <a href="#" class="card-link">Re-schedule Events</a>
-          </div>
-        </div>
+            <p>
+              <%= fa_icon "calendar" %>
+              <span class="font-weight-bold"> From:</span> <%= appointment.start_time_from_format %>
+              <span class="font-weight-bold"> To:</span> <%= appointment.end_time_to_format %>
+            </p>
 
-        <% end %>
+            </p>
+            <%= link_to 'Remove', users_remove_appointment_path(:appointment => appointment.id), method: :post%>
+
+          </div>
+
+      <% end %>
+      </div>
+
     </div>
 
   </div>
-
-</div>
 
 </div>
