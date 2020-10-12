@@ -46,9 +46,7 @@
         <% if user_signed_in? %>
           <div class="btn-group">
             <button type="button" class="btn btn-secondary dropdown-toggle fa fa-user" data-toggle="dropdown">
-              , <%= current_user.first_name %>
-              <%= current_user.last_name %>
-
+              <%= current_user.complete_name %>
             </button>
             <div class="dropdown-menu">
               <%= link_to('Profile', current_user, method: :get , class: "dropdown-item") %>

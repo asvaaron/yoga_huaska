@@ -39,5 +39,5 @@ config/database.yml
 # Temporal files
 /tmp
 
-# Idea RubyMine
+# Idea RubyMine files
 /.idea
