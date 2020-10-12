@@ -25,16 +25,15 @@ class User < ApplicationRecord
   end
 
   # Find and remove an users's appointment using id
-  def remove_appointment(id)
-    appointment = Appointment.find(id)
-    if self.appointments.exists?(appointment.id)
-      self.appointments.delete(appointment)
+  # this detaches the appointment form the user
+  def remove_appointment(appointment_id)
+    if self.appointments.exists?(appointment_id)
+      self.appointments.delete(appointment_id)
     end
   end
 
   # Find and add an users's appointment using id
-  def add_appointment(id)
-    appointment = Appointment.find(id)
+  def add_appointment(appointment)
     unless self.appointments.exists?(appointment.id)
       self.appointments << appointment
     end
