@@ -1,7 +1,7 @@
 # Yoga Huaska 
 
-App for centralizing sports and gym services. Users pay for a memebership
-and use on different types for services.
+App for centralizing sports and gym services. Users pay for a membership
+and use on different types of services.
 
 
 * Ruby version
